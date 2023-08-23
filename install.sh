@@ -29,5 +29,5 @@ packages=(
 )
 
 for package in "${packages[@]}"; do
-    /home/ragde/python/virtual/bin/pip install "$package"
+    pip install "$package"
 done
