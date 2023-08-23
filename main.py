@@ -1,6 +1,3 @@
-import threading
-import os
-from future.moves import subprocess
 from Libs.Iniciador import Iniciador
 
 
