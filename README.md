@@ -1,2 +1,2 @@
-# LasraPy
+# LaraPy
 Laravel en python yeei
