@@ -6,24 +6,27 @@ from Enums.HttpStatus import HttpStatus
 
 class Response:
 
-    def __init__(self,  *args):
+    def __init__(self, *args):
         self._json = {}
-        if len(args)==2:
+        if len(args) == 2:
             self._contructorData(args[0], args[1])
-    def _contructorData(self,mensaje, status):
-        self._mensaje=mensaje
+
+    def _contructorData(self, mensaje, status):
+        self._mensaje = mensaje
         self._status = status
 
     def jsonResponse(self):
         return self._reponseDefault(ContentType.APPLICATION_JSON)
+
     def htmlResponse(self):
         return self._reponseDefault(ContentType.TEXT_HTML)
-    def _reponseDefault(self, type:ContentType):
+
+    def _reponseDefault(self, type: ContentType):
         if type == ContentType.APPLICATION_JSON:
-            self._json['data']=self._mensaje
-            return self._response(jsonify(self._json),type,self._status)
+            self._json['data'] = self._mensaje
+            return self._response(jsonify(self._json), type, self._status)
         if type == ContentType.TEXT_HTML:
-            html='''
+            html = '''
             <!DOCTYPE html>
                 <html>
                 <head>
@@ -95,13 +98,14 @@ class Response:
                 </body>
                 </html>
             '''
-            return self._response(html.replace("{MENSAJE}",self._mensaje).replace("{STATUS}",self._status.value), type, self._status)
+            return self._response(html.replace("{MENSAJE}", self._mensaje).replace("{STATUS}", self._status.value),
+                                  type, self._status)
 
-    def jsonCustomResponse(self, json, status:HttpStatus):
-        return self._response(json,ContentType.APPLICATION_JSON,status)
+    def jsonCustomResponse(self, json, status: HttpStatus):
+        return self._response(json, ContentType.APPLICATION_JSON, status)
 
     @staticmethod
-    def _response(mensaje, typo:ContentType=ContentType.APPLICATION_JSON, status:HttpStatus=HttpStatus.HTTP_OK):
+    def _response(mensaje, typo: ContentType = ContentType.APPLICATION_JSON, status: HttpStatus = HttpStatus.HTTP_OK):
         response = make_response(mensaje, status.value)
         response.headers['Content-Type'] = typo.value
         return response
