@@ -7,27 +7,12 @@ apt-get update
 apt-get install -y ffmpeg
 
 # Instalar paquetes de Python
-packages=(
-    pydub
-    youtube_dl
-    beautifulsoup4
-    google-api-python-client
-    moviepy
-    telebot
-    flask
-    ffmpeg
-    DBUtils
-    yt-dlp
-    validators
-    pattern
-    python-dotenv
-    flask-cors
-    Flask-Caching
-    isodate
-    matplotlib
-    schedule
-)
+# Leer paquetes desde el archivo packages.txt
+packageFile="packages.txt"
+while IFS= read -r package || [[ -n "$package" ]]; do
+    echo "Instalando paquete: $package"
+    /home/ragde/python/virtual/bin/pip install "$package"
+done < "$packageFile"
 
-for package in "${packages[@]}"; do
-    pip install "$package"
-done
+echo "Instalación completada."
+
