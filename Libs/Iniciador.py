@@ -12,25 +12,29 @@ from Libs.ZeroXAPI import ZeroXAPI
 
 class Iniciador:
     pool = None
+
     def __init__(self, funcion):
         self.config = Config()
         self.listTareas = []
-        self._dir_path = self.config.get("app","DB_PATH")
-        self._dbname = self.config.get("app","DB_NAME")
-        self._maxusage = int(self.config.get("app","DB_MAX_USE"))
+        self._dir_path = self.config.get("app", "DB_PATH")
+        self._dbname = self.config.get("app", "DB_NAME")
+        self._maxusage = int(self.config.get("app", "DB_MAX_USE"))
         self._id = str(uuid.uuid4())
+
         # Crear el Connection Pool con la función de fábrica y el máximo de uso
         def create_connection():
             conn = sqlite3.connect(self._dir_path + "/" + self._dbname.lower() + '.db')
             conn.row_factory = sqlite3.Row
             return conn
+
         Iniciador.pool = PersistentDB(creator=create_connection, maxusage=self._maxusage)
         # Registrar Middles
         self.middleware = Middleware()
-        self.api = ZeroXAPI(int(self.config.get("app", "API_PORT")),self.middleware)
+        # iniciar api
+        self.api = ZeroXAPI(int(self.config.get("app", "API_PORT")), self.middleware)
 
         # Iniciar rutas
-        directory =  os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), os.getenv("DIR_ROUTES"))
+        directory = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), os.getenv("DIR_ROUTES"))
         files = os.listdir(directory)
         for file in files:
             # Ignorar archivos que no son rutas
@@ -41,12 +45,13 @@ class Iniciador:
             spec = importlib.util.spec_from_file_location(module_name, module_path)
             module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(module)
-            route = getattr(module, module_name)(self.api,self.config)
+            route = getattr(module, module_name)(self.api, self.config)
             route.register()
+        # Iniciar Vistas
 
         # Crear instancia de Scheduler y programar las tareas usando el objeto y el nombre del método
         # Iniciar tareas
-        directory =  os.path.join(
+        directory = os.path.join(
             os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
             os.getenv("DIR_TAREAS"))
         scheduler = Scheduler()
@@ -68,10 +73,8 @@ class Iniciador:
         scheduler.schedule_tasks()
         scheduler.run()
 
-
         self._funcion = funcion
         # Iniciamos el servidor flesk
-
 
     def start(self, api=True):
         self._funcion(self)

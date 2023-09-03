@@ -1,18 +1,14 @@
 from Controllers.auth import AuthController
 from Libs.Route import Route
 
-
 class api(Route):
 
     def __init__(self, app, conf):
-        super(api, self).__init__(app, self.__class__.__name__, conf, )
+        super(api, self).__init__(app, self.__class__.__name__, conf)
 
         # Definir ruta
-        @self.route("/")
-        def hello():
-            return "Hola, mundo!"
 
-        @self.route("/version")
+        @self.route("/API/version")
         def version():
             return "ZeroX API version 1.0"
 
