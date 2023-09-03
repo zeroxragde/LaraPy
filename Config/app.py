@@ -16,4 +16,5 @@ app = {
     "WEB_FRAMEWORK": Tools.env('WEB_FRAMEWORK') or "RIOTJS",
     "DIR_VIEWS": Tools.env('DIR_VIEWS') or "",
     "DIR_FRAMEWORK_FILES": Tools.env('DIR_FRAMEWORK_FILES') or "",
+    "FILE_PATH_INDEX_TEMPLATE": Tools.env('FILE_PATH_INDEX_TEMPLATE') or "",
 }
