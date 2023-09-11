@@ -103,7 +103,7 @@ class {MODEL_NAME}Controller(Controlador):
     {METODOS}
 '''
 
-template_route ='''
+template_route = '''
 from Libs.Route import Route
 
 class {ROUTE_NAME}(Route):
@@ -117,11 +117,11 @@ class {ROUTE_NAME}(Route):
             return "Hola, mundo!"
 '''
 
-template_tarea ='''
+template_tarea = '''
 from Enums.TimeUnit import TimeUnit
 from Libs.Tarea import Tarea
 
-class bitsoTarea(Tarea):
+class  {TAREA_NAME}(Tarea):
     def __init__(self, config):
         super.__init__(config)
         self.unidad=TimeUnit.minutos
@@ -134,6 +134,21 @@ class bitsoTarea(Tarea):
         return self
 
 '''
+
+template_hilo = '''
+from Models.hilo import Hilo
+
+class  {HILO_NAME}(Hilo):
+    def __init__(self):
+        super({HILO_NAME}, self).__init__()
+        self.name = "{HILO_NAME}"
+        self.funcion = self.MetodoPrueba
+
+    def MetodoPrueba(self):
+        print("holita")
+
+'''
+
 
 def makeModal(nombre, flag=False):
     directory = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Models")
@@ -155,6 +170,7 @@ def makeRoute(nombre, flag=False):
         archivo.write(contenido)
     return True
 
+
 def makeController(nombre, flag=False):
     directory = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Controllers")
     if not os.path.exists(directory):
@@ -171,19 +187,23 @@ def makeController(nombre, flag=False):
         archivo.write(contenido)
     return True
 
+
 def makeTarea(nombre, flag=False):
-    directory = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Controllers")
+    directory = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Tareas")
     if not os.path.exists(directory):
         os.makedirs(directory)
     with open(directory + "/" + nombre.lower().strip() + ".py", "w") as archivo:
-        contenido = template_controller.replace("{MODEL_NAME}", nombre)
-        if flag is not False:
-            if flag == "-r":
-                contenido = contenido.replace("{METODOS}", template_methods)
-            else:
-                contenido = contenido.replace("{METODOS}", "")
-        else:
-            contenido = contenido.replace("{METODOS}", "")
+        contenido = template_tarea.replace("{TAREA_NAME}", nombre)
+        archivo.write(contenido)
+    return True
+
+
+def makeHilo(nombre, flag=False):
+    directory = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Hilos")
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    with open(directory + "/" + nombre.lower().strip() + ".py", "w") as archivo:
+        contenido = template_hilo.replace("{HILO_NAME}", nombre)
         archivo.write(contenido)
     return True
 
@@ -200,7 +220,7 @@ def splitNameMigrate(cadena):
     if matches:
         table = matches.group(1)
         data.append(table)
-    #pdb.set_trace()
+    # pdb.set_trace()
     try:
         if len(data) == 0:
             raise ZeroXException("Revisar el en nombre de la migracion")
@@ -208,6 +228,7 @@ def splitNameMigrate(cadena):
             return data
     except:
         raise ZeroXException("Revisar el en nombre de la migracion")
+
 
 def makeMigration(nombre, flag=False):
     # Obtener fecha y hora actual
@@ -252,11 +273,12 @@ function_tipo = {
     "controller": makeController,
     "migration": makeMigration,
     "route": makeRoute,
-    "tarea":makeTarea
+    "tarea": makeTarea,
+    "hilo": makeHilo
 }
 
 
-# Define el comando personalizado y sus argumentos
+# Define el comando personalizado y sus argumentos chido
 def make(param1, param2, flag1=False):
     function_tipo[param1.lower()](param2, flag1)
 
@@ -292,8 +314,6 @@ def migrate(flag=False):
                 if estado:
                     migration.actualizar_estado(file)
 
-
-
     print(f"Migracion Completa")
 
 
@@ -322,5 +342,3 @@ if args.command == 'make':
 
 elif args.command == 'migrate':
     migrate(flag=args.m)
-
-
