@@ -11,7 +11,7 @@ apt-get install -y ffmpeg
 packageFile="packages.txt"
 while IFS= read -r package || [[ -n "$package" ]]; do
     echo "Instalando paquete: $package"
-    /home/ragde/python/virtual/bin/pip install "$package"
+    python/virtual/bin/pip install "$package"
 done < "$packageFile"
 
 echo "Instalación completada."

@@ -6,5 +6,4 @@ class HomeController(Controlador):
         super(HomeController, self).__init__()
 
     def index(self):
-        vista = self.View.showView("home",{"username": "edgar"})
-        return self.response.responseWeb(vista)
+        return self.response.responseWeb(self.View.showView("home",{"username": "edgar"}))

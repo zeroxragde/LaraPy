@@ -3,7 +3,6 @@ import sqlite3
 from Controllers.dbController import dbController
 
 
-
 class Schema(dbController):
 
     def __init__(self):
@@ -13,8 +12,6 @@ class Schema(dbController):
         self._id = str(uuid.uuid4())
         conn = sqlite3.connect(self._dir_path + "/" + self._dbname.lower() + '.db')
         super(Schema, self).__init__(conn)
-
-
 
     def drop_table(self, table):
         # Crear un cursor para ejecutar comandos SQL

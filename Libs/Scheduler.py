@@ -12,7 +12,8 @@ class Scheduler:
 
     def add_task(self, task_object: Tarea):
         interval_in_seconds = task_object.time * task_object.unidad.value
-        self.tasks.append({"interval": interval_in_seconds, "task_object": task_object, "task_method": task_object.worked})
+        self.tasks.append(
+            {"interval": interval_in_seconds, "task_object": task_object, "task_method": task_object.worked})
 
     def schedule_tasks(self):
         for task in self.tasks:
@@ -27,7 +28,6 @@ class Scheduler:
         task_object = task["task_object"]
         task_method = task["task_method"]
         getattr(task_object, task_method)()
-
 
     def run(self):
         # Creamos un hilo para ejecutar las tareas

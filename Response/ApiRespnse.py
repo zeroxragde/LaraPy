@@ -18,14 +18,19 @@ class ApiResponse(Response):
         }, HttpStatus.HTTP_OK)
 
     @staticmethod
-    def responseVideo(func):
-        response = FResponse(func, mimetype='video/mp4')
-        response.headers['Cache-Control'] = 'public, max-age=3600'  # Cache durante 1 hora en el navegador del usuario
+    def responseWeb(web):
+        response = FResponse(web, mimetype='text/html')
         return response
 
     @staticmethod
-    def responseWeb(web):
-        response = FResponse(web, mimetype='text/html')
+    def responseResource(resource,type):
+        response = FResponse(resource, mimetype=type)
+        return response
+
+    @staticmethod
+    def responseVideo(func):
+        response = FResponse(func, mimetype='video/mp4')
+        response.headers['Cache-Control'] = 'public, max-age=3600'  # Cache durante 1 hora en el navegador del usuario
         return response
 
     def responseUser(self, user, token):

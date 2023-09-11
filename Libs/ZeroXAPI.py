@@ -18,11 +18,12 @@ class ZeroXAPI:
         CORS(self._api, resources={r"/*": {"origins": "*"}}, methods=["GET", "POST", "OPTIONS"])
         self.cache = Cache(self._api, config={'CACHE_TYPE': 'simple'})
         os.environ['WERKZEUG_RUN_MAIN'] = 'True'
+
     def getFlesk(self):
         return self._api
 
     def start(self):
-        self._api.run(port=self._port)
+        self._api.run(port=self._port, threaded=True)
 
     # Configuración de la aplicación para mod_wsgi
     def application(self, environ, start_response):

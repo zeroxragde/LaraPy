@@ -1,0 +1,13 @@
+beautifulsoup4
+google-api-python-client
+flask
+dbutils
+validators
+pattern
+python-dotenv
+flask-cors
+Flask-Caching
+isodate
+schedule
+cachetools
+future

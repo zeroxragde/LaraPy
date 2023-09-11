@@ -5,6 +5,7 @@ from dbutils.persistent_db import PersistentDB
 import importlib.util
 
 from Libs.Config import Config
+from Libs.Hilos import Hilos
 from Libs.Middleware import Middleware
 from Libs.Scheduler import Scheduler
 from Libs.ZeroXAPI import ZeroXAPI
@@ -47,7 +48,6 @@ class Iniciador:
             spec.loader.exec_module(module)
             route = getattr(module, module_name)(self.api, self.config)
             route.register()
-        # Iniciar Vistas
 
         # Crear instancia de Scheduler y programar las tareas usando el objeto y el nombre del método
         # Iniciar tareas
@@ -72,11 +72,15 @@ class Iniciador:
 
         scheduler.schedule_tasks()
         scheduler.run()
-
+        # Iniciar Hilos
+        self.hilos = Hilos()
         self._funcion = funcion
+
         # Iniciamos el servidor flesk
 
     def start(self, api=True):
         self._funcion(self)
+        self.hilos.iniciar()
         if api:
             self.api.start()
+

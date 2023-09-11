@@ -7,9 +7,10 @@ from Libs.Config import Config
 from Libs.Controlador import Controlador
 from Libs.Iniciador import Iniciador
 import threading
+
+
 class dbController(Controlador):
     _conn = None
-
 
     def __init__(self, db=None):
         super(dbController, self).__init__()
@@ -22,10 +23,12 @@ class dbController(Controlador):
             self._dbname = self.config.get("app", "DB_NAME")
             self._maxusage = int(self.config.get("app", "DB_MAX_USE"))
             self._id = str(uuid.uuid4())
+
             def create_connection():
                 conn = sqlite3.connect(self._dir_path + "/" + self._dbname.lower() + '.db')
                 conn.row_factory = sqlite3.Row
                 return conn
+
             dbController._conn = PersistentDB(creator=create_connection, maxusage=self._maxusage)
 
         self._conn = dbController._conn
@@ -75,7 +78,7 @@ class dbController(Controlador):
 
         try:
             cursor = self._conn.cursor()
-            cursor.execute(query, tuple(valores+query_values))
+            cursor.execute(query, tuple(valores + query_values))
             self._conn.commit()
         except Exception as e:
             self._conn.rollback()
@@ -88,7 +91,7 @@ class dbController(Controlador):
         return self._resultados[0]
 
     def last(self):
-        return self._resultados[self._resultados.count()-1]
+        return self._resultados[self._resultados.count() - 1]
 
     def get(self):
         return self._resultados
