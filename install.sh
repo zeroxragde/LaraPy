@@ -1,18 +1,33 @@
-#!/bin/bash
+@echo off
 
-# Actualizar repositorios
-apt-get update
+REM Cambiar al directorio del script
+cd %~dp0
 
-# Instalar dependencias de sistema
-apt-get install -y ffmpeg
+REM Buscar la carpeta venv en el directorio actual
+for /d %%d in (*) do (
+    if "%%d"=="venv" (
+        echo Carpeta venv encontrada en el directorio actual.
+        set "venvPath=%%~dpdvenv\"
+    )
+)
 
-# Instalar paquetes de Python
-# Leer paquetes desde el archivo packages.txt
-packageFile="packages.txt"
-while IFS= read -r package || [[ -n "$package" ]]; do
-    echo "Instalando paquete: $package"
-    python/virtual/bin/pip install "$package"
-done < "$packageFile"
+REM Verificar si se encontró la carpeta venv
+if defined venvPath (
+    echo Usando la carpeta venv encontrada en: %venvPath%
+    echo.
 
-echo "Instalación completada."
+    REM Instalar paquetes de Python 2
+    echo Actualizar pip
+    "%venvPath%\Scripts\python.exe" -m pip install --upgrade pip
 
+    REM Leer paquetes desde el archivo packages.txt
+    set "packageFile=packages.txt"
+    for /f "usebackq tokens=*" %%p in ("%packageFile%") do (
+        echo Instalando paquete: %%p
+        %venvPath%Scripts\pip.exe install %%p
+    )
+) else (
+    echo Carpeta venv no encontrada en el directorio actual.
+)
+
+pause
