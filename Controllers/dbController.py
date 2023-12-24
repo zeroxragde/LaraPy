@@ -91,7 +91,7 @@ class dbController(Controlador):
         return self._resultados[0]
 
     def last(self):
-        return self._resultados[self._resultados.count() - 1]
+        return self._resultados[len(self._resultados) - 1]
 
     def get(self):
         return self._resultados
